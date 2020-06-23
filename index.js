@@ -11,13 +11,15 @@ const jsencrypt = require('node-jsencrypt');
 const encrypt = new jsencrypt();
 const decrypt = new jsencrypt();
 const keys = require('./keys/index.js');
+
+//* Puertos
 const portSSL = 8080;
 const portHTTP = 80;
+//* Certificado SSL
 const SSLOptions = {
   cert: fs.readFileSync("cert/ca.crt"),
   key: fs.readFileSync("cert/ca.key"),
 };
-
 //* Configuracion de Llaves
 decrypt.setPrivateKey(keys.priv);
 encrypt.setPublicKey(keys.pub);
@@ -45,7 +47,7 @@ SSLServer.post("/", (req, res) => {
   const textoEncriptado = req.body.mensaje
   if(textoEncriptado){
     const textoDesencriptado = decrypt.decrypt(req.body.mensaje);
-    console.log(textoDesencriptado);
+    console.log(`Mensaje Recibido y Desencriptado -> ${textoDesencriptado}`);
     res.json({ message: "Mensaje recibido y decodificado exitosamente en el Servidor" }).status(200);
   }
 });

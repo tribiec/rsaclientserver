@@ -1,3 +1,4 @@
+//* LLAVES RSA GENERADAS CON OPENSSL
 const keys = {
     pub: `-----BEGIN PUBLIC KEY-----
     MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtmOcIVAXxeKMiou+cijr
