@@ -3,5 +3,5 @@ Acá tenemos un ejemplo básico de la activación de Certificado SSL en el servi
 via canal web encriptado (HTTPS).
 
 Comandos para ejecutar:
-npm i  <--- Para Instalar Librerias
-npm start <--- Para Iniciar Programa una vez instaladas las librerias.
+- npm i
+- npm start
