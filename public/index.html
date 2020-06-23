@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    body{
+        margin: 0;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: grey;
+        font-weight: 600;
+        height: 100vh;
+    }
+    .container{
+        height: 500px;
+        width: 70%;
+        background: white;
+        border-radius: 20px;
+        color: black;
+        padding: 2em;
+    }
+    input, button{
+        color: black;
+        font-weight: 800;
+    }
+    input{
+        width: 70%;
+        border: 1px solid grey;
+        padding: 1em;
+    }
+    button{
+        width: 70%;
+        background: none;
+        border: 2px solid grey;
+        margin-top: 1em;
+        padding: 2em;
+    }
+    button:hover{
+        background: grey;
+        color: white;
+        transition: 0.2s;
+    }
+    #loading{
+        display: none;
+    }
+</style>
+<body>
+    <div class="container">
+        <h2>Bienvenido al Sistema de Encriptación</h2>
+        <p>Porfavor escriba mensaje a encriptar:</p>
+            <p><input id="mensaje" type="text" maxlength="250"></p>
+            <p><button>Enviar Mensaje al Servidor</button></p>
+            <p id="loading">Cargando...</p>
+    </div>
+    <script src="jsencrypt.min.js"></script>
+    <script>
+        const key = `-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtmOcIVAXxeKMiou+cijr
+3pDOKONwT4WkbKSVQ36BkEJzXQIglEMq6og7Dhb+M21zuFuS5zVVR3305oKVfejk
+k7vx/KWAQkT/NY4fd/7h6lExMfpByQFhYarNhmjDQVaChKgWrJtQW3v4y4YZhrLO
+C6fKyfKarh4hQV+ZlW+tpTJGFf93iRBBYeW6U+2+VWAoqGoC5o730DjOkpfmAC28
+PlRQcr1LGqEnBXf85fi8iBlLD5s2BcgB10fy2c/wg9ur0r35HCdexWuiaqx3Locp
+xebyGmDDXWlSdBhj3IFBQDBbcvNYqBUtKfVftLpSLpUORw3iQfvMuc5vEsSzpjMq
+1QIDAQAB
+-----END PUBLIC KEY-----`;
+        const loading = document.querySelector("#loading");
+        const encrypt = new JSEncrypt();
+        encrypt.setPublicKey(key);
+        document.querySelector("button").addEventListener("click", (evt) => {
+            loading.style.display = "block";
+            const data = document.querySelector("#mensaje").value;
+            const headers = {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+            };
+            const encrypted = encrypt.encrypt(data);
+            fetch('https://localhost:8080/',{
+                method: "POST",
+                headers,
+                body: JSON.stringify({mensaje: encrypted}),
+                mode: "cors"
+            }).then(e=> e.json()).then(json => {
+                loading.style.display = "none";
+                alert(json.message);
+                console.log(json.message);
+            }).catch(err => {
+                console.error(err);
+            });
+        });
+    </script>
+</body>
+</html>
